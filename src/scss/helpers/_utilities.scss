@@ -1,0 +1,36 @@
+// @import "_variables.scss";
+
+// 文字顏色
+// usage => .color--primary
+$color: (
+  primary: $primary-color,
+  white: $white,
+  danger: $danger_color
+);
+
+// 文字大小
+// usage => .font-size--primary
+$text_size: (
+  primary: $font_base,
+  lg: $font_lg,
+  sm: $font_sm,
+  xs: $font_xs
+);
+
+/**
+通用樣式
+*/
+// usage => .text-align--center
+$text-align: (center, right, left);
+
+// usage => .float--right
+$float: (right, left, none);
+
+// usage => .cursor--auto
+$cursor: (auto, default, pointer, text, not-allowed);
+
+// usage => .vertical-align--middle
+$vertical-align: (initial, inherit, top, middle, bottom, baseline);
+
+// usage => .display--block
+$display: (inline, inline-block, block, flex, table);

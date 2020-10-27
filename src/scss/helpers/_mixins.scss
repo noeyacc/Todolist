@@ -1,0 +1,121 @@
+@mixin clearfix() {
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}
+
+/**
+自訂義 margin & padding 間距(10, 10~50)
+*/
+@mixin generate_trbl($name, $value, $max: 4) {
+  $direction: top, right, bottom, left;
+  .#{$name}--auto {
+    #{$name}: auto;
+  }
+  @each $dir in $direction {
+    .#{$name}--#{$dir}-auto {
+      #{$name}-#{$dir}: auto;
+    }
+  }
+  @for $i from 0 through $max {
+    .#{$name}--#{$value * $i} {
+      #{$name}: $value * $i * 1px;
+    }
+    @each $dir in $direction {
+      .#{$name}--#{$dir}-#{$value * $i} {
+        #{$name}-#{$dir}: $value * $i * 1px;
+      }
+    }
+  }
+}
+
+/**
+自訂義 寬度 間距(10%, 10~100)
+*/
+@mixin width_func($value, $max) {
+  @for $i from 1 through $max {
+    .width--#{$value * $i} {
+      max-width: 100%;
+      width: $value * $i * 1% !important;
+    }
+  }
+}
+
+/**
+通用樣式
+*/
+@mixin generate($name, $value) {
+  $short_name: str_slice($name, 1, 1);
+  $total_value: $value;
+  @for $i from 1 through length($total_value) {
+    $value: nth($total_value, $i);
+    .#{$name}--#{$value} {
+      #{$name}: $value;
+    }
+  }
+}
+
+@mixin generate_obj($name, $obj) {
+  @each $key, $value in $obj {
+    .#{$name}--#{$key} {
+      #{$name}: #{$value};
+    }
+  }
+}
+
+/**
+自定義 標頭固定式表格的欄位寬度
+*/
+// ex. .ellipsis-${name}
+@mixin tableItemWidth($val, $name: "") {
+  $_name: -#{$name};
+  @if ($name != "") {
+    .ant-table-fixed-header .ant-table-tbody .ellipsis#{$_name} span {
+      width: calc(#{$val}px - 20px);
+    }
+  } @else {
+    .ant-table-fixed-header .ant-table-tbody .ellipsis span {
+      width: calc(#{$val}px - 20px);
+    }
+  }
+}
+
+// RWD通用樣式
+@mixin rwd($min: 0, $max: 0, $type: min) {
+  @if $type == max {
+    @media screen and (max-width: #{$max}px) {
+      @content;
+    }
+  } @else if $type == range {
+    @media screen and (min-width: #{$min}px) and (max-width: #{$max}px) {
+      @content;
+    }
+  } @else {
+    @media screen and (min-width: #{$min}px) {
+      @content;
+    }
+  }
+}
+
+// -----------------------------------------------以下是新的
+
+@mixin flex($align: initial, $justify: initial) {
+  display: flex;
+  align-items: $align;
+  justify-content: $justify;
+}
+
+@mixin animation($type: all, $s: $animation-duration-base) {
+  transition: $type $s;
+}
+
+@mixin border($color: $border-color-base) {
+  border: 1px solid $color;
+}
+
+// 寬度共用函式
+@mixin width($val: 180, $unit: "px") {
+  width: #{$val}#{$unit};
+}
