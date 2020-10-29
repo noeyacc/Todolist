@@ -10,7 +10,7 @@
         @click="isCreate = true"
       >
         <p>新增工作事項</p>
-        <i class="fa fa-plus"></i>
+        <aw-icon icon="plus" />
       </div>
       <div class="todo__item" v-if="isCreate">
         <div class="todo__content">
@@ -33,8 +33,10 @@
           <input type="checkbox" v-model="item.isCompleted" />
           <span class="list__text">{{ item.text }}</span>
           <div class="option">
-            <span class="fa fa-pencil" @click="editOpen(item)"></span>
-            <span class="fa fa-trash-o" @click="deleteItem(item, index)"></span>
+            <span @click="editOpen(item)"><aw-icon icon="edit"/></span>
+            <span @click="deleteItem(item, index)"
+              ><aw-icon icon="trash-alt"
+            /></span>
           </div>
         </div>
         <div class="todo__item" v-if="item.isEdit">
@@ -58,56 +60,68 @@ export default {
   data() {
     return {
       title: "工作事項清單",
+      list: [],
       isCreate: false,
       createDefaultText: "內容",
       addItem: "",
-      editItem: {
-        text: "",
-      },
+      editItem: {},
     };
   },
   computed: {
     ...mapGetters({
       todoList: "TodoList/todoList",
     }),
-    list() {
+  },
+  created() {
+    this.getList();
+    this.addItem = this.createDefaultText;
+  },
+  methods: {
+    ...mapActions({
+      createTodoItem: "TodoList/createTodoItem",
+      editTodoItem: "TodoList/editTodoItem",
+    }),
+    // 取得項目清單
+    getList() {
       let list = deepCopy(this.todoList || []);
       list = list.map((i) => {
         i.isEdit = false;
         return i;
       });
-      return list;
+      console.log("list: ", list);
+      this.list = list;
     },
-  },
-  created() {
-    this.addItem = this.createDefaultText;
-  },
-  methods: {
-    ...mapActions({
-      CreateTodoItem: "TodoList/CreateTodoItem",
-    }),
+    // 送出新增項目
     createComplete() {
-      let data = {
+      let params = {
         id: this.list.length + 1,
         isCompleted: false,
         text: this.addItem,
       };
 
-      this.CreateTodoItem(data);
+      this.createTodoItem(params);
       this.isCreate = !this.isCreate;
       this.addItem = this.createDefaultText;
     },
+    // 編輯項目
     editOpen(item) {
-      this.editItem.text = item.text;
+      this.editItem = deepCopy(item);
       item.isEdit = !item.isEdit;
+      this.$forceUpdate();
     },
+    // 關閉編輯項目
     editClose(item) {
-      this.editItem.text = "";
+      this.editItem = {};
       item.isEdit = !item.isEdit;
     },
-    editCompleted(item) {
-      item.text = this.editItem.text;
-      item.isEdit = !item.isEdit;
+    // 送出編輯項目
+    editCompleted() {
+      let params = {
+        id: this.editItem.id,
+        text: this.editItem.text,
+      };
+      this.editTodoItem(params);
+      this.getList();
     },
     deleteItem(item, val) {
       this.list.splice(val, 1);
@@ -115,3 +129,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+[class*="fa-"] {
+  color: #333;
+  margin: 4px;
+}
+</style>

@@ -18,19 +18,25 @@ const state = {
 
 const actions = {
   // 新增清單項目
-  async CreateTodoItem({ commit }, payload) {
+  async createTodoItem({ commit }, payload) {
     commit("setTodoItem", payload)
   },
-  // async [_M.GET_SPACEX_ROCKETS_DETAIL]({ commit }, payload) {
-    
-  // }
+  // 編輯清單項目
+  async editTodoItem({ commit }, payload) {
+    commit("setTodoItem", payload)
+  },
 };
 
 const mutations = {
   // 存入vuex
   setTodoItem(state, payload) {
-    const isAdd = state.todoList.findIndex(i => i.id === payload.id)
-    isAdd && (state.todoList.push(payload))
+    let list = state.todoList
+    const isAdd = list.findIndex(i => i.id === payload.id) === -1
+    const editIdx = list.findIndex(i => i.id === payload.id)
+    isAdd && (list.push(payload))
+    isAdd || (list[editIdx] = {...list[editIdx], ...payload})
+    state.todoList = list
+    console.log('state.todoList: ', state.todoList);
   }
 };
 
