@@ -4,7 +4,11 @@
       <h1>{{ title }}</h1>
     </div>
     <div class="create__group">
-      <div class="create__input" :class="{focus : isCreate}" @click="isCreate = true">
+      <div
+        class="create__input"
+        :class="{ focus: isCreate }"
+        @click="isCreate = true"
+      >
         <p>新增工作事項</p>
         <i class="fa fa-plus"></i>
       </div>
@@ -21,12 +25,12 @@
     <div class="list">
       <div
         class="list__item"
-        v-for="(item,index) in list"
+        v-for="(item, index) in list"
         :key="item.id"
-        :class="{completed : item.isCompleted}"
+        :class="{ completed: item.isCompleted }"
       >
         <div class="list__title">
-          <el-checkbox v-model="item.isCompleted"></el-checkbox>
+          <input type="checkbox" v-model="item.isCompleted" />
           <span class="list__text">{{ item.text }}</span>
           <div class="option">
             <span class="fa fa-pencil" @click="editOpen(item)"></span>
@@ -47,45 +51,49 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+import { deepCopy } from "@UTIL/other";
 export default {
   name: "Home",
   data() {
     return {
       title: "工作事項清單",
       isCreate: false,
-      list: [
-        {
-          id: 1,
-          isEdit: false,
-          isCompleted: false,
-          text: "Jurassic World Evolution"
-        },
-        {
-          id: 2,
-          isEdit: false,
-          isCompleted: false,
-          text: "Write something here"
-        }
-      ],
       createDefaultText: "內容",
       addItem: "",
       editItem: {
-        text: ""
-      }
+        text: "",
+      },
     };
+  },
+  computed: {
+    ...mapGetters({
+      todoList: "TodoList/todoList",
+    }),
+    list() {
+      let list = deepCopy(this.todoList || []);
+      list = list.map((i) => {
+        i.isEdit = false;
+        return i;
+      });
+      return list;
+    },
   },
   created() {
     this.addItem = this.createDefaultText;
   },
   methods: {
+    ...mapActions({
+      CreateTodoItem: "TodoList/CreateTodoItem",
+    }),
     createComplete() {
       let data = {
         id: this.list.length + 1,
-        isEdit: false,
         isCompleted: false,
-        text: this.addItem
+        text: this.addItem,
       };
-      this.list.push(data);
+
+      this.CreateTodoItem(data);
       this.isCreate = !this.isCreate;
       this.addItem = this.createDefaultText;
     },
@@ -103,7 +111,7 @@ export default {
     },
     deleteItem(item, val) {
       this.list.splice(val, 1);
-    }
-  }
+    },
+  },
 };
 </script>

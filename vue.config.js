@@ -40,6 +40,7 @@ module.exports = {
         "@C": "@/components",
         "@UTIL": "@/utils",
         "@V": "@/views",
+        "@M": "@/store/modules"
       }
     }
   }
