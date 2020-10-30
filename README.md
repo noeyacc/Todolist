@@ -1,6 +1,6 @@
 # Todolist
 
-## Project setup
+### Project setup
 
 ```javascript
 yarn install

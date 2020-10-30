@@ -18,17 +18,21 @@ const state = {
 
 const actions = {
   // 新增清單項目
-  async createTodoItem({ commit }, payload) {
+  createTodoItem({ commit }, payload) {
     commit("setTodoItem", payload)
   },
   // 編輯清單項目
-  async editTodoItem({ commit }, payload) {
+  editTodoItem({ commit }, payload) {
     commit("setTodoItem", payload)
   },
   // 刪除清單項目
-  async deleteTodoItem({ commit }, payload) {
+  deleteTodoItem({ commit }, payload) {
     commit("setDeleteTodoItem", payload)
   },
+  // 變更清單項目狀態
+  changeTodoItem({ commit }, payload) {
+    commit("setChangeTodoItem", payload)
+  }
 };
 
 const mutations = {
@@ -47,6 +51,14 @@ const mutations = {
     let list = state.todoList
     list = list.filter(i => i.id !== id)
     state.todoList = list
+  },
+  // 變更清單項目狀態
+  setChangeTodoItem(state, payload) {
+    const id = payload.id
+    const isCompletedValue = payload.isCompleted
+    const idx = state.todoList.findIndex(i => i.id === id)
+    state.todoList[idx].isCompleted = isCompletedValue
+    console.log('state.todoList: ', state.todoList);
   }
 };
 

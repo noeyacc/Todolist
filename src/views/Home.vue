@@ -21,7 +21,7 @@
     <div class="list">
       <div class="list__item" v-for="item in list" :key="item.id" :class="{ completed: item.isCompleted }">
         <div class="list__title">
-          <input type="checkbox" v-model="item.isCompleted" />
+          <input type="checkbox" @change="handleState(item)" :checked="item.isCompleted" />
           <span class="list__text">{{ item.text }}</span>
           <div class="option">
             <span @click="editOpen(item)"><aw-icon icon="edit"/></span>
@@ -69,7 +69,8 @@ export default {
     ...mapActions({
       createTodoItem: "TodoList/createTodoItem",
       editTodoItem: "TodoList/editTodoItem",
-      deleteTodoItem: "TodoList/deleteTodoItem"
+      deleteTodoItem: "TodoList/deleteTodoItem",
+      changeTodoItem: "TodoList/changeTodoItem"
     }),
     // 取得項目清單
     getList() {
@@ -124,6 +125,15 @@ export default {
           this.getList();
         }
       });
+    },
+    // 變更清單項目狀態
+    handleState(item) {
+      const params = {
+        id: item.id,
+        isCompleted: !item.isCompleted
+      };
+      this.changeTodoItem(params);
+      this.getList();
     }
   }
 };
