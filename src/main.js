@@ -15,6 +15,10 @@ library.add(faPlus)
 library.add(faEdit)
 library.add(faTrashAlt)
 
+// Custom message
+import registryCustomMessage from "@C/CustomMessage";
+Vue.use(registryCustomMessage);
+
 Vue.component('aw-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false

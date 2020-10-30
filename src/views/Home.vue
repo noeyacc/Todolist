@@ -4,11 +4,7 @@
       <h1>{{ title }}</h1>
     </div>
     <div class="create__group">
-      <div
-        class="create__input"
-        :class="{ focus: isCreate }"
-        @click="isCreate = true"
-      >
+      <div class="create__input" :class="{ focus: isCreate }" @click="isCreate = true">
         <p>新增工作事項</p>
         <aw-icon icon="plus" />
       </div>
@@ -23,20 +19,13 @@
       </div>
     </div>
     <div class="list">
-      <div
-        class="list__item"
-        v-for="(item, index) in list"
-        :key="item.id"
-        :class="{ completed: item.isCompleted }"
-      >
+      <div class="list__item" v-for="item in list" :key="item.id" :class="{ completed: item.isCompleted }">
         <div class="list__title">
           <input type="checkbox" v-model="item.isCompleted" />
           <span class="list__text">{{ item.text }}</span>
           <div class="option">
             <span @click="editOpen(item)"><aw-icon icon="edit"/></span>
-            <span @click="deleteItem(item, index)"
-              ><aw-icon icon="trash-alt"
-            /></span>
+            <span @click="deleteItem(item)"><aw-icon icon="trash-alt"/></span>
           </div>
         </div>
         <div class="todo__item" v-if="item.isEdit">
@@ -64,13 +53,13 @@ export default {
       isCreate: false,
       createDefaultText: "內容",
       addItem: "",
-      editItem: {},
+      editItem: {}
     };
   },
   computed: {
     ...mapGetters({
-      todoList: "TodoList/todoList",
-    }),
+      todoList: "TodoList/todoList"
+    })
   },
   created() {
     this.getList();
@@ -80,28 +69,29 @@ export default {
     ...mapActions({
       createTodoItem: "TodoList/createTodoItem",
       editTodoItem: "TodoList/editTodoItem",
+      deleteTodoItem: "TodoList/deleteTodoItem"
     }),
     // 取得項目清單
     getList() {
       let list = deepCopy(this.todoList || []);
-      list = list.map((i) => {
+      list = list.map(i => {
         i.isEdit = false;
         return i;
       });
-      console.log("list: ", list);
       this.list = list;
     },
     // 送出新增項目
     createComplete() {
       let params = {
-        id: this.list.length + 1,
+        id: this.list[this.list.length - 1].id + 1,
         isCompleted: false,
-        text: this.addItem,
+        text: this.addItem
       };
 
       this.createTodoItem(params);
       this.isCreate = !this.isCreate;
       this.addItem = this.createDefaultText;
+      this.getList();
     },
     // 編輯項目
     editOpen(item) {
@@ -118,20 +108,30 @@ export default {
     editCompleted() {
       let params = {
         id: this.editItem.id,
-        text: this.editItem.text,
+        text: this.editItem.text
       };
       this.editTodoItem(params);
       this.getList();
     },
-    deleteItem(item, val) {
-      this.list.splice(val, 1);
-    },
-  },
+    // 刪除項目
+    deleteItem(item) {
+      this.$customMessage({
+        type: "warning",
+        content: "確定要刪除此清單項目?",
+        onOk: () => {
+          console.log("callback");
+          this.deleteTodoItem(item.id);
+          this.getList();
+        }
+      });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
 [class*="fa-"] {
   color: #333;
   margin: 4px;
+  cursor: pointer;
 }
 </style>

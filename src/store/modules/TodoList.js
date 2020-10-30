@@ -25,6 +25,10 @@ const actions = {
   async editTodoItem({ commit }, payload) {
     commit("setTodoItem", payload)
   },
+  // 刪除清單項目
+  async deleteTodoItem({ commit }, payload) {
+    commit("setDeleteTodoItem", payload)
+  },
 };
 
 const mutations = {
@@ -36,7 +40,13 @@ const mutations = {
     isAdd && (list.push(payload))
     isAdd || (list[editIdx] = {...list[editIdx], ...payload})
     state.todoList = list
-    console.log('state.todoList: ', state.todoList);
+  },
+  // 刪除清單項目
+  setDeleteTodoItem(state, payload) {
+    const id = payload
+    let list = state.todoList
+    list = list.filter(i => i.id !== id)
+    state.todoList = list
   }
 };
 
