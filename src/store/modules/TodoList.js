@@ -58,7 +58,6 @@ const mutations = {
     const isCompletedValue = payload.isCompleted
     const idx = state.todoList.findIndex(i => i.id === id)
     state.todoList[idx].isCompleted = isCompletedValue
-    console.log('state.todoList: ', state.todoList);
   }
 };
 
