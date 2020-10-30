@@ -128,10 +128,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-[class*="fa-"] {
-  color: #333;
-  margin: 4px;
-  cursor: pointer;
-}
-</style>

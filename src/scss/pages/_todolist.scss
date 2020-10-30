@@ -12,6 +12,11 @@ $bg_color: #fafafa;
 .todolist {
   margin: 60px auto 0;
   width: 600px;
+  [class*="fa-"] {
+    color: #333;
+    margin: 4px;
+    cursor: pointer;
+  }
 }
 
 .title {
@@ -35,7 +40,8 @@ $bg_color: #fafafa;
     font-size: $font_base;
     cursor: pointer;
     transition: all 0.2s ease;
-    i {
+    svg {
+      margin: 0;
       position: absolute;
       top: 50%;
       right: 20px;
@@ -105,19 +111,23 @@ $bg_color: #fafafa;
   .list__title {
     position: relative;
     padding: 10px 20px;
+    display: flex;
+    align-items: center;
     .list__text {
       display: inline-block;
       overflow: hidden;
-      margin-left: 5px;
-      width: 100px;
+      margin-left: 10px;
+      width: 60%;
+      line-height: 33px;
       vertical-align: middle;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     .option {
       position: absolute;
-      top: 10px;
+      top: 50%;
       right: 20px;
+      transform: translateY(-50%);
       .fa {
         margin-left: 10px;
         font-size: 18px;
